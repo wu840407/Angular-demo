@@ -1,0 +1,60 @@
+<mat-stepper linear >
+    <ng-template matStepperIcon="user">
+        <mat-icon>supervisor_account</mat-icon>
+    </ng-template>
+    <mat-step label="要開始了預備好了嗎?">
+        <button mat-button matStepperNext>Yes, go go go ...</button>
+    </mat-step>
+    <mat-step  #step1 state="user" [completed]="isChecked.checked" errorMessage="抱歉，您必須同意此合約才能成為本站會員!!">
+        <ng-template matStepLabel>
+            <h3>會員合約</h3><strong>(須同意合約)</strong>
+        </ng-template>
+        <div>
+            歡迎註冊成為本站會員，請先閱讀本站使用規範，完全同意以下規範方可註冊成為會員。
+            <ol>
+                <li>每天至少要開懷笑一次</li>
+                <li>傷心時可以哭</li>
+                <li>接受自己不是萬能，學不會可以問</li>
+                <li>工作不是唯一，別看著孩兒橫著長大 ...</li>
+                <li>別人的生活也許值得羨慕，但你何嘗未曾擁有屬於你的幸福呢?!</li>
+                <li>睡飽再來上班</li>
+                <li>你願意相信來這世上是為了被疼愛及疼愛人的</li>
+            </ol>
+            <mat-checkbox #isChecked (change)="step1.hasError=!isChecked.checked" >同意以上合約</mat-checkbox>
+        </div>
+        <button mat-button  [disabled]="!isChecked.checked" (click)="SetNext()" >下一步</button>
+    </mat-step>
+    <mat-step [stepControl]="signUpForm"  state="user" label="會員註冊" errorMessage="請確實填寫註冊資料">
+        <div>
+            <form [formGroup]="signUpForm">
+                <mat-form-field>
+                    <input matInput formControlName="userName" placeholder="請輸入帳號">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <input matInput formControlName="phone" placeholder="手機號碼">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <input matInput type="password" formControlName="password" placeholder="密碼">
+                </mat-form-field>
+            </form>
+        </div>
+        <div>
+            <button mat-button matStepperNext>下一步</button>
+        </div>
+    </mat-step>
+    <mat-step label="確認密碼" completed="false" errorMessage="確認密碼必須跟上一步的密碼相同!!">
+        <mat-form-field>
+            <input #confirmPWD matInput type="password"  placeholder="確認密碼">
+        </mat-form-field>
+        <div>
+            <button mat-button matStepperPrevious>上一步</button>
+            <button mat-button matStepperNext (click)="checkPassword(confirmPWD.value)" >下一步</button>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>完成</ng-template>
+        <div class="stepContent">
+            恭喜 {{ signUpForm.get("userName")?.value }} 完成註冊。
+        </div>
+    </mat-step>
+</mat-stepper>
